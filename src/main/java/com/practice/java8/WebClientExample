@@ -1,0 +1,60 @@
+import java.io.FileInputStream;
+import java.security.KeyStore;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.TrustManagerFactory;
+
+import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
+
+public class WebClientExample {
+
+    private static final String KEYSTORE_PASSWORD = "your_keystore_password";
+    private static final String TRUSTSTORE_PASSWORD = "your_truststore_password";
+
+    public static void main(String[] args) throws Exception {
+        // Create SSLContext
+        SSLContextBuilder sslContextBuilder = createSslContextBuilder();
+        CloseableHttpClient httpClient = HttpClients.custom().setSSLContext(sslContextBuilder.build()).build();
+
+        // Create Reactor Netty HttpClient
+        HttpClient reactorHttpClient = HttpClient.create().secure(t -> t.sslContext(sslContextBuilder));
+
+        // Create Reactor Client Http Connector
+        ReactorClientHttpConnector connector = new ReactorClientHttpConnector(reactorHttpClient);
+
+        // Create WebClient
+        WebClient webClient = WebClient.builder().clientConnector(connector).build();
+
+        // Use WebClient to make requests
+        String result = webClient.get().uri("https://example.com").retrieve().bodyToMono(String.class).block();
+
+        // Print the response body
+        System.out.println(result);
+    }
+
+    private static SSLContextBuilder createSslContextBuilder() throws Exception {
+        String keystorePath = "/path/to/your/keystore.jks";
+        String truststorePath = "/path/to/your/truststore.jks";
+
+        KeyStore keystore = KeyStore.getInstance("JKS");
+        keystore.load(new FileInputStream(keystorePath), KEYSTORE_PASSWORD.toCharArray());
+
+        KeyStore truststore = KeyStore.getInstance("JKS");
+        truststore.load(new FileInputStream(truststorePath), TRUSTSTORE_PASSWORD.toCharArray());
+
+        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+        keyManagerFactory.init(keystore, KEYSTORE_PASSWORD.toCharArray());
+
+        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        trustManagerFactory.init(truststore);
+
+        return SSLContextBuilder.create()
+                .loadKeyMaterial(keystore, KEYSTORE_PASSWORD.toCharArray())
+                .loadTrustMaterial(truststore, new TrustSelfSignedStrategy());
+    }
+}
