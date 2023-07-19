@@ -56,6 +56,17 @@ export class ConnectorIntakeComponent implements OnInit {
   customerIdentificationOptions: string[] = [];
   customerAddIdentificationOptions: string[] = [];
 
+
+connectorIntakeForm: FormGroup;
+  prodCategoryOptions: string[] = [];
+  userAccessOptions: string[] = [];
+  customerIdentificationOptions: string[] = [];
+  customerAddIdentificationOptions: string[] = [];
+  selectedProdCategory: string[] = [];
+  selectedUserAccess: string[] = [];
+  selectedCustomerIdentification: string[] = [];
+  selectedCustomerAddIdentification: string[] = [];
+
   constructor(
     private formBuilder: FormBuilder,
     private connectorIntakeService: ConnectorIntakeService
