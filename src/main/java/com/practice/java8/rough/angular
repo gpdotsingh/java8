@@ -136,87 +136,85 @@ select {
 
 ———————————HTML————————————
 
-<!-- connector-intake.component.html -->
-
 <div class="container">
   <h2>Connector Intake Form</h2>
   <form [formGroup]="connectorIntakeForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="col">
-        <label>Connector Intake Name</label>
-        <input type="text" formControlName="connectorIntakeName" required>
+        <label for="connectorIntakeName">Connector Intake Name</label>
+        <input type="text" id="connectorIntakeName" formControlName="connectorIntakeName" required>
       </div>
       <div class="col">
-        <label>Connector Intake URL</label>
-        <input type="text" formControlName="connectorIntakeURL" required>
+        <label for="connectorIntakeURL">Connector Intake URL</label>
+        <input type="text" id="connectorIntakeURL" formControlName="connectorIntakeURL" required>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <label>Business Process</label>
-        <input type="text" formControlName="businessProcess" required>
+        <label for="businessProcess">Business Process</label>
+        <input type="text" id="businessProcess" formControlName="businessProcess" required>
       </div>
       <div class="col">
-        <label>Prod Category</label>
-        <select formControlName="prodCategory" required>
+        <label for="prodCategory">Prod Category</label>
+        <select id="prodCategory" formControlName="prodCategory" multiple (change)="onProdCategoryChange($event.target.selectedOptions)">
           <option *ngFor="let category of prodCategoryOptions" [value]="category">{{ category }}</option>
         </select>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <label>User Access</label>
-        <select formControlName="userAccess" required>
+        <label for="userAccess">User Access</label>
+        <select id="userAccess" formControlName="userAccess" multiple (change)="onUserAccessChange($event.target.selectedOptions)">
           <option *ngFor="let access of userAccessOptions" [value]="access">{{ access }}</option>
         </select>
       </div>
       <div class="col">
-        <label>Customer Identification</label>
-        <select formControlName="customerIdentification" required>
+        <label for="customerIdentification">Customer Identification</label>
+        <select id="customerIdentification" formControlName="customerIdentification" multiple (change)="onCustomerIdentificationChange($event.target.selectedOptions)">
           <option *ngFor="let identification of customerIdentificationOptions" [value]="identification">{{ identification }}</option>
         </select>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <label>Customer Add Identification</label>
-        <select formControlName="customerAddIdentification" required>
+        <label for="customerAddIdentification">Customer Add Identification</label>
+        <select id="customerAddIdentification" formControlName="customerAddIdentification" multiple (change)="onCustomerAddIdentificationChange($event.target.selectedOptions)">
           <option *ngFor="let addIdentification of customerAddIdentificationOptions" [value]="addIdentification">{{ addIdentification }}</option>
         </select>
       </div>
       <div class="col">
-        <label>Volume</label>
-        <input type="text" formControlName="volume" required>
+        <label for="volume">Volume</label>
+        <input type="text" id="volume" formControlName="volume" required>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <label>ChForArchival</label>
-        <input type="text" formControlName="chForArchival" required>
+        <label for="chForArchival">CH For Archival</label>
+        <input type="text" id="chForArchival" formControlName="chForArchival" required>
       </div>
       <div class="col">
-        <label>Expected Peak</label>
-        <input type="text" formControlName="expectedPeak" required>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <label>Contact Person Detail</label>
-        <input type="text" formControlName="contactPersonDetail" required>
-      </div>
-      <div class="col">
-        <label>SrcOARID</label>
-        <input type="text" formControlName="srcOARID" required>
+        <label for="expectedPeak">Expected Peak</label>
+        <input type="text" id="expectedPeak" formControlName="expectedPeak" required>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <label>Po Name</label>
-        <input type="text" formControlName="poName" required>
+        <label for="contactPersonDetail">Contact Person Detail</label>
+        <input type="text" id="contactPersonDetail" formControlName="contactPersonDetail" required>
       </div>
       <div class="col">
-        <label>Connector Team</label>
-        <input type="text" formControlName="connectorTeam" required>
+        <label for="srcOARID">Src OARID</label>
+        <input type="text" id="srcOARID" formControlName="srcOARID" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="poName">PO Name</label>
+        <input type="text" id="poName" formControlName="poName" required>
+      </div>
+      <div class="col">
+        <label for="connectorTeam">Connector Team</label>
+        <input type="text" id="connectorTeam" formControlName="connectorTeam" required>
       </div>
     </div>
     <button type="submit">Submit</button>
