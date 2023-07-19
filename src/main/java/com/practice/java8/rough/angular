@@ -1,0 +1,224 @@
+Angular.
+
+————— Services——————————————————
+
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ConnectorIntakeService {
+  constructor() { }
+
+  getProdCategoryOptions(): Observable<string[]> {
+    // Simulate fetching data from an API or other data source
+    return of(['d1', 'd2', 'd3', 'd4']);
+  }
+
+  getUserAccessOptions(): Observable<string[]> {
+    // Simulate fetching data from an API or other data source
+    return of(['u1', 'u2', 'u3', 'u4']);
+  }
+
+  getCustomerIdentificationOptions(): Observable<string[]> {
+    // Simulate fetching data from an API or other data source
+    return of(['ci1', 'ci2', 'ci3', 'ci4']);
+  }
+
+  getCustomerAddIdentificationOptions(): Observable<string[]> {
+    // Simulate fetching data from an API or other data source
+    return of(['ca1', 'ca2', 'ca3', 'ca4']);
+  }
+}
+
+
+
+
+
+
+———————   Component———————————
+
+
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConnectorIntakeService } from './connector-intake.service';
+
+@Component({
+  selector: 'app-connector-intake',
+  templateUrl: './connector-intake.component.html',
+  styleUrls: ['./connector-intake.component.css']
+})
+export class ConnectorIntakeComponent implements OnInit {
+  connectorIntakeForm: FormGroup;
+  prodCategoryOptions: string[] = [];
+  userAccessOptions: string[] = [];
+  customerIdentificationOptions: string[] = [];
+  customerAddIdentificationOptions: string[] = [];
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private connectorIntakeService: ConnectorIntakeService
+  ) { }
+
+  ngOnInit() {
+    this.connectorIntakeForm = this.formBuilder.group({
+      connectorIntakeName: ['', Validators.required],
+      connectorIntakeURL: ['', Validators.required],
+      businessProcess: ['', Validators.required],
+      prodCategory: ['', Validators.required],
+      userAccess: ['', Validators.required],
+      customerIdentification: ['', Validators.required],
+      customerAddIdentification: ['', Validators.required],
+      volume: ['', Validators.required],
+      chForArchival: ['', Validators.required],
+      expectedPeak: ['', Validators.required],
+      contactPersonDetail: ['', Validators.required],
+      srcOARID: ['', Validators.required],
+      poName: ['', Validators.required],
+      connectorTeam: ['', Validators.required]
+    });
+
+    this.loadDropdownOptions();
+  }
+
+  loadDropdownOptions() {
+    this.connectorIntakeService.getProdCategoryOptions().subscribe(options => {
+      this.prodCategoryOptions = options;
+    });
+
+    this.connectorIntakeService.getUserAccessOptions().subscribe(options => {
+      this.userAccessOptions = options;
+    });
+
+    this.connectorIntakeService.getCustomerIdentificationOptions().subscribe(options => {
+      this.customerIdentificationOptions = options;
+    });
+
+    this.connectorIntakeService.getCustomerAddIdentificationOptions().subscribe(options => {
+      this.customerAddIdentificationOptions = options;
+    });
+  }
+
+  onSubmit() {
+     if (this.connectorIntakeForm.valid) {
+      this.connectorIntakeService.saveConnectorIntake(this.connectorIntakeForm.value);
+      this.connectorIntakeForm.reset();
+  }
+}
+
+
+———————CSS—————————————
+
+.container {
+  margin: 20px;
+}
+
+.row {
+  margin-bottom: 10px;
+}
+
+.col {
+  display: inline-block;
+  width: 45%;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+select {
+  width: 100%;
+}
+
+———————————HTML————————————
+
+<!-- connector-intake.component.html -->
+
+<div class="container">
+  <h2>Connector Intake Form</h2>
+  <form [formGroup]="connectorIntakeForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col">
+        <label>Connector Intake Name</label>
+        <input type="text" formControlName="connectorIntakeName" required>
+      </div>
+      <div class="col">
+        <label>Connector Intake URL</label>
+        <input type="text" formControlName="connectorIntakeURL" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label>Business Process</label>
+        <input type="text" formControlName="businessProcess" required>
+      </div>
+      <div class="col">
+        <label>Prod Category</label>
+        <select formControlName="prodCategory" required>
+          <option *ngFor="let category of prodCategoryOptions" [value]="category">{{ category }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label>User Access</label>
+        <select formControlName="userAccess" required>
+          <option *ngFor="let access of userAccessOptions" [value]="access">{{ access }}</option>
+        </select>
+      </div>
+      <div class="col">
+        <label>Customer Identification</label>
+        <select formControlName="customerIdentification" required>
+          <option *ngFor="let identification of customerIdentificationOptions" [value]="identification">{{ identification }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label>Customer Add Identification</label>
+        <select formControlName="customerAddIdentification" required>
+          <option *ngFor="let addIdentification of customerAddIdentificationOptions" [value]="addIdentification">{{ addIdentification }}</option>
+        </select>
+      </div>
+      <div class="col">
+        <label>Volume</label>
+        <input type="text" formControlName="volume" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label>ChForArchival</label>
+        <input type="text" formControlName="chForArchival" required>
+      </div>
+      <div class="col">
+        <label>Expected Peak</label>
+        <input type="text" formControlName="expectedPeak" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label>Contact Person Detail</label>
+        <input type="text" formControlName="contactPersonDetail" required>
+      </div>
+      <div class="col">
+        <label>SrcOARID</label>
+        <input type="text" formControlName="srcOARID" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label>Po Name</label>
+        <input type="text" formControlName="poName" required>
+      </div>
+      <div class="col">
+        <label>Connector Team</label>
+        <input type="text" formControlName="connectorTeam" required>
+      </div>
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+</div>
