@@ -248,3 +248,145 @@ select {
     <button type="submit">Submit</button>
   </form>
 </div>
+-----------------------------------
+
+
+
+
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ConnectorIntakeComponent } from './connector-intake.component';
+import { ConnectorIntakeService } from './connector-intake.service';
+
+describe('ConnectorIntakeComponent', () => {
+  let component: ConnectorIntakeComponent;
+  let fixture: ComponentFixture<ConnectorIntakeComponent>;
+  let connectorIntakeService: ConnectorIntakeService;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ConnectorIntakeComponent],
+      imports: [ReactiveFormsModule],
+      providers: [ConnectorIntakeService]
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ConnectorIntakeComponent);
+    component = fixture.componentInstance;
+    connectorIntakeService = TestBed.inject(ConnectorIntakeService);
+    fixture.detectChanges();
+  });
+
+  it('should create the component', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should load dropdown options on initialization', () => {
+    spyOn(connectorIntakeService, 'getProdCategoryOptions').and.returnValue(['d1', 'd2', 'd3', 'd4']);
+    spyOn(connectorIntakeService, 'getUserAccessOptions').and.returnValue(['u1', 'u2', 'u3', 'u4']);
+    spyOn(connectorIntakeService, 'getCustomerIdentificationOptions').and.returnValue(['ci1', 'ci2', 'ci3', 'ci4']);
+    spyOn(connectorIntakeService, 'getCustomerAddIdentificationOptions').and.returnValue(['ca1', 'ca2', 'ca3', 'ca4']);
+
+    component.ngOnInit();
+
+    expect(connectorIntakeService.getProdCategoryOptions).toHaveBeenCalled();
+    expect(connectorIntakeService.getUserAccessOptions).toHaveBeenCalled();
+    expect(connectorIntakeService.getCustomerIdentificationOptions).toHaveBeenCalled();
+    expect(connectorIntakeService.getCustomerAddIdentificationOptions).toHaveBeenCalled();
+    expect(component.prodCategoryOptions).toEqual(['d1', 'd2', 'd3', 'd4']);
+    expect(component.userAccessOptions).toEqual(['u1', 'u2', 'u3', 'u4']);
+    expect(component.customerIdentificationOptions).toEqual(['ci1', 'ci2', 'ci3', 'ci4']);
+    expect(component.customerAddIdentificationOptions).toEqual(['ca1', 'ca2', 'ca3', 'ca4']);
+  });
+
+  it('should update selectedProdCategory array when prodCategory dropdown changes', () => {
+    const event = {
+      target: {
+        selectedOptions: [{ value: 'd1' }, { value: 'd2' }]
+      }
+    };
+
+    component.onProdCategoryChange(event);
+
+    expect(component.selectedProdCategory).toEqual(['d1', 'd2']);
+  });
+
+  it('should update selectedUserAccess array when userAccess dropdown changes', () => {
+    const event = {
+      target: {
+        selectedOptions: [{ value: 'u1' }, { value: 'u2' }]
+      }
+    };
+
+    component.onUserAccessChange(event);
+
+    expect(component.selectedUserAccess).toEqual(['u1', 'u2']);
+  });
+
+  it('should update selectedCustomerIdentification array when customerIdentification dropdown changes', () => {
+    const event = {
+      target: {
+        selectedOptions: [{ value: 'ci1' }, { value: 'ci2' }]
+      }
+    };
+
+    component.onCustomerIdentificationChange(event);
+
+    expect(component.selectedCustomerIdentification).toEqual(['ci1', 'ci2']);
+  });
+
+  it('should update selectedCustomerAddIdentification array when customerAddIdentification dropdown changes', () => {
+    const event = {
+      target: {
+        selectedOptions: [{ value: 'ca1' }, { value: 'ca2' }]
+      }
+    };
+
+    component.onCustomerAddIdentificationChange(event);
+
+    expect(component.selectedCustomerAddIdentification).toEqual(['ca1', 'ca2']);
+  });
+
+  it('should reset selected options and form data on form submission', () => {
+    component.connectorIntakeForm.setValue({
+      connectorIntakeName: 'Test Name',
+      connectorIntakeURL: 'Test URL',
+      businessProcess: 'Test Business Process',
+      prodCategory: 'd1',
+      userAccess: 'u1',
+      customerIdentification: 'ci1',
+      customerAddIdentification: 'ca1',
+      volume: 'Test Volume',
+      chForArchival: 'Test ChForArchival',
+      expectedPeak: 'Test Expected Peak',
+      contactPersonDetail: 'Test Contact Person Detail',
+      srcOARID: 'Test SrcOARID',
+      poName: 'Test Po Name',
+      connectorTeam: 'Test Connector Team'
+    });
+
+    component.onSubmit();
+
+    expect(component.connectorIntakeForm.value).toEqual({
+      connectorIntakeName: '',
+      connectorIntakeURL: '',
+      businessProcess: '',
+      prodCategory: '',
+      userAccess: '',
+      customerIdentification: '',
+      customerAddIdentification: '',
+      volume: '',
+      chForArchival: '',
+      expectedPeak: '',
+      contactPersonDetail: '',
+      srcOARID: '',
+      poName: '',
+      connectorTeam: ''
+    });
+    expect(component.selectedProdCategory).toEqual([]);
+    expect(component.selectedUserAccess).toEqual([]);
+    expect(component.selectedCustomerIdentification).toEqual([]);
+    expect(component.selectedCustomerAddIdentification).toEqual([]);
+  });
+});
