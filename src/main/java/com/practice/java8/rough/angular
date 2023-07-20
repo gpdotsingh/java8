@@ -390,3 +390,51 @@ describe('ConnectorIntakeComponent', () => {
     expect(component.selectedCustomerAddIdentification).toEqual([]);
   });
 });
+-----------------------------------
+
+
+import { TestBed } from '@angular/core/testing';
+import { ConnectorIntakeService } from './connector-intake.service';
+
+describe('ConnectorIntakeService', () => {
+  let service: ConnectorIntakeService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(ConnectorIntakeService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  it('should return the correct ProdCategoryOptions', (done: DoneFn) => {
+    service.getProdCategoryOptions().subscribe(values => {
+      expect(values).toEqual(['d1', 'd2', 'd3', 'd4']);
+      done();
+    });
+  });
+
+  it('should return the correct UserAccessOptions', (done: DoneFn) => {
+    service.getUserAccessOptions().subscribe(values => {
+      expect(values).toEqual(['u1', 'u2', 'u3', 'u4']);
+      done();
+    });
+  });
+
+  it('should return the correct CustomerIdentificationOptions', (done: DoneFn) => {
+    service.getCustomerIdentificationOptions().subscribe(values => {
+      expect(values).toEqual(['ci1', 'ci2', 'ci3', 'ci4']);
+      done();
+    });
+  });
+
+  it('should return the correct CustomerAddIdentificationOptions', (done: DoneFn) => {
+    service.getCustomerAddIdentificationOptions().subscribe(values => {
+      expect(values).toEqual(['ca1', 'ca2', 'ca3', 'ca4']);
+      done();
+    });
+  });
+});
+
+
