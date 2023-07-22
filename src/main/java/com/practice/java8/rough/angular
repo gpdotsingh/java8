@@ -438,4 +438,47 @@ describe('ConnectorIntakeService', () => {
     });
   });
 });
+------------------///---------
+
+it('should call saveConnectorIntake method of service when form is submitted', () => {
+    spyOn(connectorIntakeService, 'saveConnectorIntake').and.returnValue(of({}));
+
+    component.connectorIntakeForm.setValue({
+      connectorIntakeName: 'Test Name',
+      connectorIntakeURL: 'Test URL',
+      businessProcess: 'Test Business Process',
+      prodCategory: 'd1',
+      userAccess: 'u1',
+      customerIdentification: 'ci1',
+      customerAddIdentification: 'ca1',
+      volume: 'Test Volume',
+      chForArchival: 'Test ChForArchival',
+      expectedPeak: 'Test Expected Peak',
+      contactPersonDetail: 'Test Contact Person Detail',
+      srcOARID: 'Test SrcOARID',
+      poName: 'Test Po Name',
+      connectorTeam: 'Test Connector Team'
+    });
+
+    component.onSubmit();
+
+    expect(connectorIntakeService.saveConnectorIntake).toHaveBeenCalled();
+    expect(component.connectorIntakeForm.value).toEqual({
+      connectorIntakeName: '',
+      connectorIntakeURL: '',
+      businessProcess: '',
+      prodCategory: '',
+      userAccess: '',
+      customerIdentification: '',
+      customerAddIdentification: '',
+      volume: '',
+      chForArchival: '',
+      expectedPeak: '',
+      contactPersonDetail: '',
+      srcOARID: '',
+      poName: '',
+      connectorTeam: ''
+    });
+  });
+
 
