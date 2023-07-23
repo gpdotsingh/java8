@@ -481,4 +481,33 @@ it('should call saveConnectorIntake method of service when form is submitted', (
     });
   });
 
+----------------
+
+
+
+onSubmit() {
+    if (this.connectorIntakeForm.valid) {
+      const formData: ConnectorIntakeModel = {
+        connectorIntakeName: this.connectorIntakeForm.get('connectorIntakeName').value,
+        connectorIntakeURL: this.connectorIntakeForm.get('connectorIntakeURL').value,
+        businessProcess: this.connectorIntakeForm.get('businessProcess').value,
+        prodCategory: this.connectorIntakeForm.get('prodCategory').value,
+        userAccess: this.connectorIntakeForm.get('userAccess').value,
+        customerIdentification: this.connectorIntakeForm.get('customerIdentification').value,
+        customerAddIdentification: this.connectorIntakeForm.get('customerAddIdentification').value,
+        volume: this.connectorIntakeForm.get('volume').value,
+        chForArchival: this.connectorIntakeForm.get('chForArchival').value,
+        expectedPeak: this.connectorIntakeForm.get('expectedPeak').value,
+        contactPersonDetail: this.connectorIntakeForm.get('contactPersonDetail').value,
+        srcOARID: this.connectorIntakeForm.get('srcOARID').value,
+        poName: this.connectorIntakeForm.get('poName').value,
+        connectorTeam: this.connectorIntakeForm.get('connectorTeam').value
+      };
+
+      this.connectorIntakeService.saveConnectorIntake(formData);
+      this.connectorIntakeForm.reset();
+    }
+  }
+}
+
 
