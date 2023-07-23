@@ -509,5 +509,35 @@ onSubmit() {
     }
   }
 }
+-----------------
+
+it('should call connectorIntakeService.saveConnectorIntake with correct formData on onSubmit', () => {
+    const formDataSpy = spyOn(connectorIntakeService, 'saveConnectorIntake');
+    const formValues = {
+      connectorIntakeName: 'Test Intake',
+      connectorIntakeURL: 'http://testurl.com',
+      businessProcess: 'Test Business Process',
+      prodCategory: 'd1',
+      userAccess: 'u2',
+      customerIdentification: 'ci3',
+      customerAddIdentification: 'ca4',
+      volume: '100',
+      chForArchival: 'Yes',
+      expectedPeak: '200',
+      contactPersonDetail: 'John Doe',
+      srcOARID: '12345',
+      poName: 'John Smith',
+      connectorTeam: 'Test Team'
+    };
+
+    // Set form values
+    component.connectorIntakeForm.setValue(formValues);
+
+    // Call onSubmit
+    component.onSubmit();
+
+    // Check if saveConnectorIntake was called with correct formData
+    expect(formDataSpy).toHaveBeenCalledWith(formValues);
+  });
 
 
